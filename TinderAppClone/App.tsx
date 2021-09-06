@@ -10,6 +10,11 @@
 
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, SafeAreaView, Pressable } from 'react-native';
+
+import Amplify from 'aws-amplify';
+import config from './src/aws-exports';
+import { withAuthenticator } from 'aws-amplify-react-native';
+
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,10 +22,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './src/screens/HomeScreen';
 import MatchesScreen from './src/screens/MatchesScreen';
 
-declare type ActiveScreen = 'HomeScreen' | 'MatchesScreen';
+Amplify.configure(config);
 
 const App = () => {
-  const [activeScreen, setActiveScreen] = useState<ActiveScreen>('HomeScreen');
+  const [activeScreen, setActiveScreen] = useState<
+    'HomeScreen' | 'MatchesScreen'
+  >('HomeScreen');
 
   const setActiveHomeScreen = useCallback(() => {
     setActiveScreen('HomeScreen');
@@ -78,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withAuthenticator(App);

@@ -1,0 +1,17 @@
+{
+  "providers": [
+    "awscloudformation"
+  ],
+  "projectName": "TinderClone",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react-native",
+    "config": {
+      "SourceDir": "/Users/apple/Desktop/Project/FullStack/TinderAppClone/TinderAppClone ",
+      "DistributionDir": "/Users/apple/Desktop/Project/FullStack/TinderAppClone/TinderAppClone ",
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
+    }
+  }
+}
