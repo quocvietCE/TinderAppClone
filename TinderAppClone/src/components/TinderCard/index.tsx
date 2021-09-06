@@ -1,23 +1,27 @@
-import React, {FunctionComponent} from 'react';
-import {Text, ImageBackground, View, StyleSheet} from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { Text, ImageBackground, View, StyleSheet } from 'react-native';
 
-interface User {
-  name: string;
-  image: string;
-  bio: string;
+export type CardItemType = {
+  id: string;
+  title: string;
+  createdAt: string;
+};
+
+interface CardProps {
+  user: CardItemType;
 }
 
-const Card: FunctionComponent<User> = ({name, image, bio}) => {
+const Card: FunctionComponent<CardProps> = ({ user }) => {
   return (
     <View style={styles.card}>
       <ImageBackground
         source={{
-          uri: image,
+          uri: user.image,
         }}
         style={styles.image}>
         <View style={styles.cardInner}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.bio}>{bio}</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.bio}>{user.bio}</Text>
         </View>
       </ImageBackground>
     </View>
