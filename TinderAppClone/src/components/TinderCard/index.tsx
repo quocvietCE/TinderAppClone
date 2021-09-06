@@ -2,9 +2,9 @@ import React, { FunctionComponent } from 'react';
 import { Text, ImageBackground, View, StyleSheet } from 'react-native';
 
 export type CardItemType = {
-  id: string;
-  title: string;
-  createdAt: string;
+  name: string;
+  image: string;
+  bio: string;
 };
 
 interface CardProps {

@@ -25,10 +25,10 @@ const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
 interface AnimatedStackProps {
-  onSwipeRight: () => void;
-  onSwipeLeft: () => void;
+  onSwipeRight: (userProfile: CardItemType) => void;
+  onSwipeLeft: (userProfile: CardItemType) => void;
   data: Array<CardItemType>;
-  renderItem: ({ item: CardItemType }) => ReactElement;
+  renderItem: ({ item }: { item: CardItemType }) => ReactElement;
 }
 
 const AnimatedStack: FunctionComponent<AnimatedStackProps> = ({
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     zIndex: 1,
+    // elevation: 1,
     elevation: 1,
   },
 });
