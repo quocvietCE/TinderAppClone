@@ -114,7 +114,7 @@ Parameters:
             
             
             
-  serviceName:
+  useDefault:
     Type: String
   
             
@@ -122,31 +122,15 @@ Parameters:
   usernameAttributes:
     Type: CommaDelimitedList
       
-  useDefault:
-    Type: String
-  
-            
-  
-  userPoolGroups:
-    Type: String
-            
         
   userPoolGroupList:
     Type: CommaDelimitedList
       
-  
-  adminQueries:
+            
+  serviceName:
     Type: String
-            
-            
   
-  thirdPartyAuth:
-    Type: String
             
-        
-  authProviders:
-    Type: CommaDelimitedList
-      
   
   usernameCaseSensitive:
     Type: String
@@ -169,7 +153,7 @@ Resources:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'tinderd5d8b8ff_sns-role', !Join ['',[ 'sns', 'd5d8b8ff', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'tinder82680071_sns-role', !Join ['',[ 'sns', '82680071', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -181,10 +165,10 @@ Resources:
               - "sts:AssumeRole"
             Condition:
               StringEquals:
-                sts:ExternalId: tinderd5d8b8ff_role_external_id
+                sts:ExternalId: tinder82680071_role_external_id
       Policies:
         -
-          PolicyName: tinderd5d8b8ff-sns-policy
+          PolicyName: tinder82680071-sns-policy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -210,11 +194,6 @@ Resources:
         
         -
           Name: email
-          Required: true
-          Mutable: true
-        
-        -
-          Name: preferred_username
           Required: true
           Mutable: true
         
@@ -246,7 +225,7 @@ Resources:
       SmsAuthenticationMessage: !Ref smsAuthenticationMessage
       SmsConfiguration:
         SnsCallerArn: !GetAtt SNSRole.Arn
-        ExternalId: tinderd5d8b8ff_role_external_id
+        ExternalId: tinder82680071_role_external_id
     
   
   UserPoolClientWeb:
@@ -254,7 +233,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: tinderd5d8b8ff_app_clientWeb
+      ClientName: tinder82680071_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -264,7 +243,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: tinderd5d8b8ff_app_client
+      ClientName: tinder82680071_app_client
       
       GenerateSecret: !Ref userpoolClientGenerateSecret
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
@@ -275,7 +254,7 @@ Resources:
   # Created to execute Lambda which gets userpool app client config values
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', 'd5d8b8ff', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', '82680071', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -329,7 +308,7 @@ Resources:
   # Marked as depending on UserPoolClientRole for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: tinderd5d8b8ff_userpoolclient_lambda_iam_policy
+      PolicyName: tinder82680071_userpoolclient_lambda_iam_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -346,7 +325,7 @@ Resources:
   # Marked as depending on UserPoolClientLambdaPolicy for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: tinderd5d8b8ff_userpoolclient_lambda_log_policy
+      PolicyName: tinder82680071_userpoolclient_lambda_log_policy
       Roles:
         - !Ref UserPoolClientRole
       PolicyDocument:
@@ -386,7 +365,7 @@ Resources:
   # Always created
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'testAuthIdentityPool', !Join ['',['testAuthIdentityPool', '__', !Ref env]]]
+      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'tinderappclone82680071_identitypool_82680071', !Join ['',['tinderappclone82680071_identitypool_82680071', '__', !Ref env]]]
       
       CognitoIdentityProviders:
         - ClientId:  !Ref UserPoolClient

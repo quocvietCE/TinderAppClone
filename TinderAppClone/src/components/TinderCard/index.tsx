@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Text, ImageBackground, View, StyleSheet } from 'react-native';
 
 export type CardItemType = {
+  id: string;
   name: string;
   image: string;
   bio: string;
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
 
-    elevation: 11,
+    // elevation: 1,
   },
   image: {
     width: '100%',

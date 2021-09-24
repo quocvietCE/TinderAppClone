@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { StyleSheet, View, SafeAreaView, Pressable } from 'react-native';
 
 import Amplify from 'aws-amplify';
@@ -21,12 +21,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './src/screens/HomeScreen';
 import MatchesScreen from './src/screens/MatchesScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import UserDetailsScreen from './src/screens/UserDetailsScreen';
 
 Amplify.configure(config);
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState<
-    'HomeScreen' | 'MatchesScreen'
+    'HomeScreen' | 'MatchesScreen' | 'ProfileScreen' | 'UserDetailsScreen'
   >('HomeScreen');
 
   const setActiveHomeScreen = useCallback(() => {
@@ -36,6 +38,23 @@ const App = () => {
   const setActiveMatchesScreen = useCallback(() => {
     setActiveScreen('MatchesScreen');
   }, []);
+
+  const setActiveProfileScreen = useCallback(() => {
+    setActiveScreen('ProfileScreen');
+  }, []);
+
+  const showScreen = useMemo(() => {
+    switch (activeScreen) {
+      case 'HomeScreen':
+        return <HomeScreen />;
+      case 'MatchesScreen':
+        return <MatchesScreen />;
+      case 'UserDetailsScreen':
+        return <UserDetailsScreen />;
+      default:
+        return <ProfileScreen />;
+    }
+  }, [activeScreen]);
 
   const color = '#b5b5b5';
   const activeColor = '#F76C6B';
@@ -62,10 +81,16 @@ const App = () => {
             color={activeScreen === 'MatchesScreen' ? activeColor : color}
           />
         </Pressable>
-
-        <FontAwesome name="user" size={30} color={color} />
+        <Pressable onPress={setActiveProfileScreen}>
+          <FontAwesome
+            name="user"
+            size={30}
+            color={activeScreen === 'ProfileScreen' ? activeColor : color}
+          />
+        </Pressable>
       </View>
-      {activeScreen === 'HomeScreen' ? <HomeScreen /> : <MatchesScreen />}
+      {/* {activeScreen === 'HomeScreen' ? <HomeScreen /> : <MatchesScreen />} */}
+      {showScreen}
     </SafeAreaView>
   );
 };

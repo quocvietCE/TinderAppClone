@@ -1,6 +1,6 @@
 {
   "auth": {
-    "TinderClone": {
+    "tinderappclone82680071": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,8 +8,7 @@
       "frontendAuthConfig": {
         "loginMechanisms": [],
         "signupAttributes": [
-          "EMAIL",
-          "PREFERRED_USERNAME"
+          "EMAIL"
         ],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,
@@ -18,12 +17,15 @@
         "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
         ]
       }
     }
   },
   "api": {
-    "TinderClone": {
+    "TinderAppClone": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -42,7 +44,7 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authTinderClone"
+                "userPoolId": "authtinderappclone82680071"
               }
             }
           ]

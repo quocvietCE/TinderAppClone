@@ -4,7 +4,7 @@ import React, {
   FunctionComponent,
   ReactElement,
 } from 'react';
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, useWindowDimensions, Text } from 'react-native';
 
 import Animated, {
   useSharedValue,
@@ -129,7 +129,7 @@ const AnimatedStack: FunctionComponent<AnimatedStackProps> = ({
         </View>
       )}
 
-      {currentProfile && (
+      {currentProfile ? (
         <PanGestureHandler onGestureEvent={gestureHandler}>
           <Animated.View style={[styles.animatedCard, cardStyle]}>
             <Animated.Image
@@ -145,6 +145,10 @@ const AnimatedStack: FunctionComponent<AnimatedStackProps> = ({
             {renderItem({ item: currentProfile })}
           </Animated.View>
         </PanGestureHandler>
+      ) : (
+        <View>
+          <Text>Oopps, No more users</Text>
+        </View>
       )}
     </View>
   );
@@ -176,7 +180,6 @@ const styles = StyleSheet.create({
     top: 10,
     zIndex: 1,
     // elevation: 1,
-    elevation: 1,
   },
 });
 

@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "testAuthIdentityPool",
+    "identityPoolName": "tinderappclone82680071_identitypool_82680071",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "tinderd5d8b8ff",
-    "userPoolName": "TinderClone",
+    "resourceNameTruncated": "tinder82680071",
+    "userPoolName": "tinderappclone82680071_userpool_82680071",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -12,24 +12,27 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Forgot password code: {####}",
-    "emailVerificationMessage": "Forgot password code: {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-        "email",
-        "preferred_username"
+        "email"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [],
-    "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "Tinderd5d8b8ff_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [
+        "email"
+    ],
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "userpoolClientLambdaRole": "tinder82680071_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "d5d8b8ff",
-    "resourceName": "TinderClone",
+    "sharedId": "82680071",
+    "resourceName": "tinderappclone82680071",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -43,16 +46,12 @@
             "Arn"
         ]
     },
-    "serviceName": "Cognito",
+    "useDefault": "default",
     "usernameAttributes": [
         "email"
     ],
-    "useDefault": "manual",
-    "userPoolGroups": false,
     "userPoolGroupList": [],
-    "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": [],
+    "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "dependsOn": []
 }
