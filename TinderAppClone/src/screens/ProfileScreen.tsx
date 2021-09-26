@@ -48,12 +48,11 @@ const ProfileScreen: FunctionComponent = () => {
   useEffect(() => {
     const getCurrentUser = async () => {
       const userAuth = await Auth.currentAuthenticatedUser();
-      const dbUsers = await DataStore.query(
-        User,
-        (u) => u.sub === userAuth.attributes.sub,
+      const dbUsers = await DataStore.query(User, (u) =>
+        u.sub('eq', userAuth.attributes.sub),
       );
 
-      if (dbUsers.length < 0) {
+      if (!dbUsers || dbUsers.length === 0) {
         return;
       }
       const dbUser = dbUsers[0];
@@ -67,7 +66,8 @@ const ProfileScreen: FunctionComponent = () => {
     getCurrentUser();
   }, []);
 
-  const onSignOut = useCallback(() => {
+  const onSignOut = useCallback(async() => {
+    await DataStore.clear()
     Auth.signOut();
   }, []);
 

@@ -19,8 +19,9 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "matchUser1Id"
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "User1ID"
                     }
                 },
                 "User2": {
@@ -32,22 +33,23 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "matchUser2Id"
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "User2ID"
                     }
                 },
                 "User1ID": {
                     "name": "User1ID",
                     "isArray": false,
-                    "type": "String",
+                    "type": "ID",
                     "isRequired": true,
                     "attributes": []
                 },
                 "User2ID": {
                     "name": "User2ID",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "ID",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "isMatch": {
@@ -155,13 +157,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "matchID": {
-                    "name": "matchID",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -216,5 +211,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "4c19ce0fe469133d806ec531ab39ee75"
+    "version": "7dd082c86c8409223f20607844556d81"
 };

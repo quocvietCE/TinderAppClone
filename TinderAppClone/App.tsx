@@ -8,10 +8,10 @@
  * @format
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { StyleSheet, View, SafeAreaView, Pressable } from 'react-native';
 
-import Amplify from 'aws-amplify';
+import Amplify, { Hub } from 'aws-amplify';
 import config from './src/aws-exports';
 import { withAuthenticator } from 'aws-amplify-react-native';
 
@@ -24,12 +24,24 @@ import MatchesScreen from './src/screens/MatchesScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import UserDetailsScreen from './src/screens/UserDetailsScreen';
 
-Amplify.configure(config);
+Amplify.configure({ ...config, Analytics: { enabled: false } });
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState<
     'HomeScreen' | 'MatchesScreen' | 'ProfileScreen' | 'UserDetailsScreen'
   >('HomeScreen');
+
+  useEffect(() => {
+    // Create listener
+    const listener = Hub.listen('datastore', async (hubData) => {
+      const { event, data } = hubData.payload;
+      if (event === 'modelSynced') {
+        console.log(`User has a network connection: , ${JSON.stringify(data)}`);
+        // console.log(`Model has finished syncing: ${model.name}`);
+      }
+    });
+    return () => listener();
+  }, []);
 
   const setActiveHomeScreen = useCallback(() => {
     setActiveScreen('HomeScreen');

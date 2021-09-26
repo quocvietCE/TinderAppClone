@@ -1,8 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
-import users from '../assets/data/users';
+import usersMock from '../assets/data/users';
+import { DataStore, Auth } from 'aws-amplify';
+import { Match, User } from '../models';
+import { UserMode } from './ProfileScreen';
 
 const MatchesScreen = () => {
+  const [matches, setMatches] = useState([]);
+  const [me, setMe] = useState(null);
+
+  const getCurrentUser = async () => {
+    const userAuth = await Auth.currentAuthenticatedUser();
+
+    const dbUser = await DataStore.query(User, (u) =>
+      u.sub('eq', userAuth.attributes.sub),
+    );
+
+    console.log('dbUser: ', dbUser);
+    setMe(dbUser[0]);
+    // }
+  };
+
+  useEffect(() => getCurrentUser(), []);
+
+  useEffect(() => {
+    if (!me) {
+      return;
+    }
+    const fetchMatches = async () => {
+      const fetchMatchesData = await DataStore.query(Match, (m) =>
+        m.isMatch('eq', true).User1ID('eq', me.id),
+      );
+      console.log('fetchMatchesData: ', fetchMatchesData);
+      // setUsers(await DataStore.query(User));
+      // setUsers(fetchUsersData);
+      if (fetchMatchesData.length > 0) {
+        setMatches(fetchMatchesData);
+      }
+    };
+    fetchMatches();
+  }, []);
+
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.container}>
@@ -10,7 +48,12 @@ const MatchesScreen = () => {
           New Matches
         </Text>
         <View style={styles.users}>
-          {users.map((user) => (
+          {/* {usersMock.map((user) => (
+            <View style={styles.user} key={user.id}>
+              <Image source={{ uri: user.image }} style={styles.image} />
+            </View>
+          ))} */}
+          {matches.map((user) => (
             <View style={styles.user} key={user.id}>
               <Image source={{ uri: user.image }} style={styles.image} />
             </View>

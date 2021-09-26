@@ -21,7 +21,7 @@ export declare class Match {
   readonly User1?: User;
   readonly User2?: User;
   readonly User1ID: string;
-  readonly User2ID?: string;
+  readonly User2ID: string;
   readonly isMatch: boolean;
   readonly createdAt?: string;
   readonly updatedAt?: string;
@@ -37,7 +37,6 @@ export declare class User {
   readonly gender: Genders | keyof typeof Genders;
   readonly lookingFor?: Genders | keyof typeof Genders;
   readonly sub: string;
-  readonly matchID?: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);

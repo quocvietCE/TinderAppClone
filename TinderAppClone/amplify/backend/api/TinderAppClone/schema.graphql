@@ -2,8 +2,8 @@ type Match @model @auth(rules: [{ allow: public }]) {
   id: ID!
   User1: User @connection(fields: ["User1ID"])
   User2: User @connection(fields: ["User2ID"])
-  User1ID: String!
-  User2ID: String
+  User1ID: ID!
+  User2ID: ID!
   isMatch: Boolean!
 }
 
@@ -21,5 +21,4 @@ type User @model @auth(rules: [{ allow: public }]) {
   gender: Genders!
   lookingFor: Genders
   sub: String!
-  matchID: String
 }

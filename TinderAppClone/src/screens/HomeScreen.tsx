@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
-import { DataStore, Auth } from 'aws-amplify';
+import { DataStore, Auth, Hub } from 'aws-amplify';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -19,15 +19,13 @@ const HomeScreen = () => {
   useEffect(() => {
     const getCurrentUser = async () => {
       const userAuth = await Auth.currentAuthenticatedUser();
-      const dbUsers = await DataStore.query(
-        User,
-        (u) => u.sub === userAuth.attributes.sub,
+      // console.log('userAuth: ', userAuth);
+      // console.log('userAuth.attributes: ', userAuth.attributes);
+      const dbUser = await DataStore.query(User, (u) =>
+        u.sub('eq', userAuth.attributes.sub),
       );
-
-      if (dbUsers.length < 0) {
-        return;
-      }
-      setMe(dbUsers[0]);
+      console.log('dbUser: ', dbUser);
+      setMe(dbUser[0]);
     };
     getCurrentUser();
   }, []);
@@ -57,22 +55,52 @@ const HomeScreen = () => {
   }, []);
 
   const onSwipeLeft = (user: CardItemType) => {
+    console.log('onSwipeLeft: ', user);
     if (!currentUser || !me) {
       return;
     }
-    console.warn('swipe left', user.name);
+    console.log('swipe left', user.name);
   };
 
   const onSwipeRight = async (user: CardItemType) => {
-    console.warn('swipe right 0: ', user);
+    console.log('onSwipeRight 0: ', user);
+    console.log('onSwipeRight me: ', me);
     if (!user || !me) {
       return;
     }
+
+    const myMatches = await DataStore.query(Match, (match) =>
+      match.User1ID('eq', me.id).User2ID('eq', user.id),
+    );
+
+    console.log('myMatches 0: ', myMatches);
+
+    if (myMatches.length > 0) {
+      console.log('You already swiped right to this user');
+      return;
+    }
+
+    const hisMatches = await DataStore.query(Match, (match) =>
+      match.User1ID('eq', user.id).User2ID('eq', me.id),
+    );
+
+    console.log('hisMatches 0: ', hisMatches);
+
+    if (hisMatches.length > 0) {
+      console.log('Yay, this is a new match');
+      const hisMatch = hisMatches[0];
+      DataStore.save(
+        Match.copyOf(hisMatch, (updated) => (updated.isMatch = true)),
+      );
+      return;
+    }
+
+    console.log('Sending her a match request!');
     const matchData = await DataStore.save(
       new Match({ User1ID: me.id, User2ID: user.id, isMatch: false }),
     );
-    console.warn('matchData: ', matchData);
-    console.warn('swipe right: ', user.name);
+    console.log('matchData: ', matchData);
+    console.log('swipe right: ', user.name);
   };
 
   return (
