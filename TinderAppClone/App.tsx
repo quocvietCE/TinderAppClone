@@ -9,9 +9,15 @@
  */
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { StyleSheet, View, SafeAreaView, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 
-import Amplify, { Hub } from 'aws-amplify';
+import Amplify, { DataStore, Hub } from 'aws-amplify';
 import config from './src/aws-exports';
 import { withAuthenticator } from 'aws-amplify-react-native';
 
@@ -30,16 +36,20 @@ const App = () => {
   const [activeScreen, setActiveScreen] = useState<
     'HomeScreen' | 'MatchesScreen' | 'ProfileScreen' | 'UserDetailsScreen'
   >('HomeScreen');
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
   useEffect(() => {
     // Create listener
     const listener = Hub.listen('datastore', async (hubData) => {
       const { event, data } = hubData.payload;
-      if (event === 'modelSynced') {
+      if (event === 'modelSynced' && data?.model?.name === 'User') {
         console.log(`User has a network connection: , ${JSON.stringify(data)}`);
         // console.log(`Model has finished syncing: ${model.name}`);
+        console.log('User Model has finished syncing');
+        setIsUserLoading(false);
       }
     });
+    // DataStore.start();
     return () => listener();
   }, []);
 
@@ -56,9 +66,16 @@ const App = () => {
   }, []);
 
   const showScreen = useMemo(() => {
+    // if (activeScreen === 'HomeScreen') {
+    //   return <HomeScreen isUserLoading={isUserLoading} />;
+    // }
+    // console.log('isUserLoading: ', isUserLoading);
+    // if (isUserLoading) {
+    //   return <ActivityIndicator style={{ flex: 1 }} color="red" size="large" />;
+    // }
     switch (activeScreen) {
       case 'HomeScreen':
-        return <HomeScreen />;
+        return <HomeScreen isUserLoading={isUserLoading} />;
       case 'MatchesScreen':
         return <MatchesScreen />;
       case 'UserDetailsScreen':
@@ -66,7 +83,7 @@ const App = () => {
       default:
         return <ProfileScreen />;
     }
-  }, [activeScreen]);
+  }, [activeScreen, isUserLoading]);
 
   const color = '#b5b5b5';
   const activeColor = '#F76C6B';
@@ -103,6 +120,7 @@ const App = () => {
       </View>
       {/* {activeScreen === 'HomeScreen' ? <HomeScreen /> : <MatchesScreen />} */}
       {showScreen}
+      {/* {isUserLoading && } */}
     </SafeAreaView>
   );
 };

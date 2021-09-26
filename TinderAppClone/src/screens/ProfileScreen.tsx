@@ -12,6 +12,7 @@ import {
   Pressable,
   TextInput,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Auth, DataStore } from 'aws-amplify';
@@ -66,8 +67,8 @@ const ProfileScreen: FunctionComponent = () => {
     getCurrentUser();
   }, []);
 
-  const onSignOut = useCallback(async() => {
-    await DataStore.clear()
+  const onSignOut = useCallback(async () => {
+    await DataStore.clear();
     Auth.signOut();
   }, []);
 
