@@ -20,62 +20,48 @@ const HomeScreen = (
   const [currentUser, setCurrentUser] = useState<UserMode | null>(null);
   const [me, setMe] = useState<UserMode | null>(null);
 
-  useEffect(
-    () => {
-      // if (isUserLoading) {
-      //   return;
-      // }
-      const getCurrentUser = async () => {
-        const userAuth = await Auth.currentAuthenticatedUser();
-        // console.log('userAuth: ', userAuth);
-        // console.log('userAuth.attributes: ', userAuth.attributes);
-        const dbUser = await DataStore.query(User, (u) =>
-          u.sub('eq', userAuth.attributes.sub),
-        );
-        if (!dbUser || dbUser.length === 0) {
-          return;
-        }
-        console.log('dbUser: ', dbUser);
-        setMe(dbUser[0]);
-      };
-      getCurrentUser();
-    },
-    [
-      // isUserLoading
-    ],
-  );
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const userAuth = await Auth.currentAuthenticatedUser();
 
-  useEffect(
-    () => {
-      // if (isUserLoading) {
-      //   return;
-      // }
-      const fetchUsers = async () => {
-        const fetchUsersData = await DataStore.query(User);
+      const dbUser = await DataStore.query(User, (u) =>
+        u.sub('eq', userAuth.attributes.sub),
+      );
+      if (!dbUser || dbUser.length === 0) {
+        return;
+      }
+      console.log('dbUser: ', dbUser);
+      setMe(dbUser[0]);
+    };
+    getCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const fetchUsersData = await DataStore.query(User, (user) =>
+        user.gender('eq', me.lookingFor),
+      );
+      console.log('fetchUsersData: ', fetchUsersData);
+      // setUsers(await DataStore.query(User));
+      // setUsers(fetchUsersData);
+      if (fetchUsersData.length > 0) {
+        const usersDataConver = fetchUsersData.map((itemUser) => {
+          return {
+            id: itemUser.id,
+            name: itemUser.name,
+            image: itemUser.image,
+            bio: itemUser.bio,
+            gender: itemUser.gender,
+            lookingFor: itemUser.lookingFor,
+          };
+        });
+        setUsers(usersDataConver);
         console.log('fetchUsersData: ', fetchUsersData);
-        // setUsers(await DataStore.query(User));
-        // setUsers(fetchUsersData);
-        if (fetchUsersData.length > 0) {
-          const usersDataConver = fetchUsersData.map((itemUser) => {
-            return {
-              id: itemUser.id,
-              name: itemUser.name,
-              image: itemUser.image,
-              bio: itemUser.bio,
-              gender: itemUser.gender,
-              lookingFor: itemUser.lookingFor,
-            };
-          });
-          setUsers(usersDataConver);
-          console.log('fetchUsersData: ', fetchUsersData);
-        }
-      };
-      fetchUsers();
-    },
-    [
-      // isUserLoading
-    ],
-  );
+        console.log('usersDataConver: ', usersDataConver);
+      }
+    };
+    fetchUsers();
+  }, [me, ,]);
 
   const onSwipeLeft = (user: CardItemType) => {
     console.log('onSwipeLeft: ', user);
